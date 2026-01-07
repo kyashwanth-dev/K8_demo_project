@@ -43,6 +43,16 @@ spec:
                 configMapKeyRef:
                   name: mongodb-configmap
                   key: database_url
+            - name: ME_CONFIG_BASICAUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-express-username
+            - name: ME_CONFIG_BASICAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-express-password
           livenessProbe:
             httpGet:
               path: /
