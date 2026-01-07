@@ -69,6 +69,11 @@ kubectl port-forward service/mongo-express-service 8081:8081
 
 ## Credentials
 
+### Mongo Express Web UI Login
+- **Username:** `admin`
+- **Password:** `pass`
+
+### MongoDB Database
 - **Username:** `master`
 - **Password:** `halwa`
 

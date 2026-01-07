@@ -18,6 +18,8 @@ This repository contains Kubernetes configuration files for deploying MongoDB an
 - Secret: `mongodb-secret`
   - `mongo-root-username`: master (base64: bWFzdGVy)
   - `mongo-root-password`: halwa (base64: aGFsd2E=)
+  - `mongo-express-username`: admin (base64: YWRtaW4=)
+  - `mongo-express-password`: pass (base64: cGFzcw==)
 
 **Security Note**: In production, use stronger passwords and consider using external secret management solutions like HashiCorp Vault or AWS Secrets Manager.
 
@@ -68,6 +70,8 @@ This repository contains Kubernetes configuration files for deploying MongoDB an
     - `ME_CONFIG_MONGODB_ADMINUSERNAME` (from secret)
     - `ME_CONFIG_MONGODB_ADMINPASSWORD` (from secret)
     - `ME_CONFIG_MONGODB_SERVER` (from configmap)
+    - `ME_CONFIG_BASICAUTH_USERNAME` (from secret)
+    - `ME_CONFIG_BASICAUTH_PASSWORD` (from secret)
   - Health Checks:
     - Liveness Probe: HTTP GET on / port 8081 every 10s (starts after 30s)
     - Readiness Probe: HTTP GET on / port 8081 every 10s (starts after 5s)
