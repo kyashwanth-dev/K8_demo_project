@@ -79,20 +79,19 @@ This repository contains Kubernetes configuration files for deploying MongoDB an
 - **Service**: `mongo-express-service`
   - Type: LoadBalancer
   - Port: 8081
-  - NodePort: 30000
   - Selector: app=mongo-express
 
 **Understanding Service Exposure:**
-The service is configured as type `LoadBalancer` with NodePort 30000. The behavior differs by platform:
-- **Docker Desktop:** LoadBalancer automatically exposes to `localhost:8081`. NodePort 30000 is NOT accessible on localhost because it opens inside the k8s node container, not on the host.
+The service is configured as type `LoadBalancer`. The behavior differs by platform:
+- **Docker Desktop:** LoadBalancer automatically exposes to `localhost:8081`.
 - **Cloud Providers (AWS/GCP/Azure):** LoadBalancer creates an external load balancer with a public IP address.
-- **Minikube:** LoadBalancer requires `minikube tunnel` to get an external IP. NodePort works at the Minikube VM IP address.
+- **Minikube:** LoadBalancer requires `minikube tunnel` to get an external IP.
 - **kind/k3s:** LoadBalancer may remain pending. Use port-forward instead.
 
 **Recommended Access Methods by Platform:**
 - **All platforms:** `kubectl port-forward service/mongo-express-service 8081:8081` (most reliable)
 - **Docker Desktop:** `http://localhost:8081` (LoadBalancer automatic mapping)
-- **Minikube:** `http://<minikube-ip>:30000` (after running `minikube ip`)
+- **Minikube:** `minikube tunnel` then `http://<EXTERNAL-IP>:8081` (from `kubectl get svc`)
 - **Cloud:** `http://<EXTERNAL-IP>:8081` (from `kubectl get svc`)
 
 ## Deployment Order
@@ -226,15 +225,7 @@ kubectl get service mongo-express-service
 ### LoadBalancer Pending
 - If using Minikube: Use `minikube tunnel` in a separate terminal
 - If cloud provider: Check cloud-specific load balancer setup
-- Alternative: Use NodePort (port 30000) for Minikube, or port-forward for all platforms
-
-### NodePort Not Accessible on Docker Desktop
-This is expected behavior. NodePort opens ports on the Kubernetes node (which runs in a Docker container on Docker Desktop), but Docker Desktop doesn't publish those to the host by default. Only LoadBalancer ports get automatic host exposure.
-
-**Solutions:**
-- Use LoadBalancer: Access `http://localhost:8081` (works automatically on Docker Desktop)
-- Use port-forward: `kubectl port-forward service/mongo-express-service 8081:8081`
-- For Minikube: Use `minikube ip` and access `http://<minikube-ip>:30000`
+- Alternative: Use port-forward for all platforms: `kubectl port-forward service/mongo-express-service 8081:8081`
 
 ## Conclusion
 
